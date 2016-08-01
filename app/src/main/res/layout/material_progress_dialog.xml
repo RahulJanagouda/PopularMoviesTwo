@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:background="@drawable/material_progress_dialog_bg"
+    android:padding="16dp">
+
+    <com.rahuljanagouda.popularmoviesone.customViews.ProgressWheel
+        android:id="@+id/progress_wheel"
+        style="@style/progressWheelStyle"
+        wheel:matProg_barColor="@color/colorAccent"
+        wheel:matProg_progressIndeterminate="true" />
+
+
+    <LinearLayout
+        style="@style/loaderTextContets"
+        android:layout_toRightOf="@+id/progress_wheel">
+
+        <TextView
+            android:id="@+id/txtHangOn"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
