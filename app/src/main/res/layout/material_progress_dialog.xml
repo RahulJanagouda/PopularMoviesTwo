@@ -8,7 +8,7 @@
     android:background="@drawable/material_progress_dialog_bg"
     android:padding="16dp">
 
-    <com.rahuljanagouda.popularmoviesone.customViews.ProgressWheel
+    <com.rahuljanagouda.popularmoviestwo.customViews.ProgressWheel
         android:id="@+id/progress_wheel"
         style="@style/progressWheelStyle"
         wheel:matProg_barColor="@color/colorAccent"
@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="17sp"
+            android:text="@string/hang_on"
             android:textColor="@color/black" />
 
         <TextView

@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/movieName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom|center"
             android:background="@color/blackOverlay"
             android:gravity="center|bottom"

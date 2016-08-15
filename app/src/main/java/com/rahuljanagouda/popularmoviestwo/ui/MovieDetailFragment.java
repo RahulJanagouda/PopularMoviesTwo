@@ -124,40 +124,44 @@ public class MovieDetailFragment extends Fragment {
             AppController.getInstance().addToRequestQueue(gsonRequest);
 
 
-            ImageView movieThumb = (ImageView) mContext.findViewById(R.id.movieThumb);
+//            if (mContext instanceof MovieDetailActivity){
+                ImageView movieThumb = (ImageView) rootView.findViewById(R.id.movieThumb);
+                if (movieResult.getPosterPath() != null) {
+                    Glide
+                            .with(mContext)
+                            .load(Network.TMDB_IMAGE_HQ_BASE_URL + movieResult.getPosterPath())
+                            .error(R.drawable.placeholder)
+                            .into(movieThumb);
+
+                } else {
+                    Glide
+                            .with(mContext)
+                            .load(R.drawable.placeholder)
+                            .into(movieThumb);
+                }
+
+//                toolbar = (Toolbar) mContext.findViewById(R.id.toolbar);
+//
+//                toolbar.setTitle(movieResult.getTitle());
+//
+//                mContext.setSupportActionBar(toolbar);
+//
+//                mContext.getSupportActionBar().setTitle(movieResult.getTitle());
+//
+//                mContext.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+//            }
+
             TextView movieOverview = (TextView) rootView.findViewById(R.id.movieOverview);
+            TextView movieTitle = (TextView) rootView.findViewById(R.id.movieTitle);
             TextView movieRleaseDate = (TextView) rootView.findViewById(R.id.movieRleaseDate);
             TextView movieRating = (TextView) rootView.findViewById(R.id.movieRating);
 
-            toolbar = (Toolbar) mContext.findViewById(R.id.toolbar);
-
-
-
-            if (movieResult.getPosterPath() != null) {
-                Glide
-                        .with(mContext)
-                        .load(Network.TMDB_IMAGE_HQ_BASE_URL + movieResult.getPosterPath())
-                        .error(R.drawable.placeholder)
-                        .into(movieThumb);
-
-            } else {
-                Glide
-                        .with(mContext)
-                        .load(R.drawable.placeholder)
-                        .into(movieThumb);
-            }
             movieOverview.setText(movieResult.getOverview());
             movieRleaseDate.setText(movieResult.getReleaseDate());
             movieRating.setText(String.valueOf(movieResult.getVoteAverage()));
-
-            toolbar.setTitle(movieResult.getTitle());
-
-            mContext.setSupportActionBar(toolbar);
-
-            mContext.getSupportActionBar().setTitle(movieResult.getTitle());
-
-            mContext.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+            movieTitle.setText(movieResult.getTitle());
 
         }
 

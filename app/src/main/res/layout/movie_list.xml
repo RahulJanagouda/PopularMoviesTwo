@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.MovieListActivity"
-    tools:listitem="@layout/movie_list_content" />
+    tools:listitem="@layout/item_card" />

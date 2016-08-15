@@ -14,4 +14,7 @@
     <string name="_7_10">7/10</string>
     <string name="dummy_review">Dummy Review</string>
     <string name="na">NA!</string>
+    <string name="error_1">Holy moly, we just blew a connection. Need..More..Signal..</string>
+    <string name="error_2">Back in 20min, Rahul is on his way to the command center</string>
+    <string name="hang_on">Hang On</string>
 </resources>

@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -19,6 +20,7 @@ import com.rahuljanagouda.popularmoviestwo.AppController;
 import com.rahuljanagouda.popularmoviestwo.R;
 import com.rahuljanagouda.popularmoviestwo.adapters.GridSpacingItemDecoration;
 import com.rahuljanagouda.popularmoviestwo.adapters.RecyclerAdapter;
+import com.rahuljanagouda.popularmoviestwo.customViews.MaterialProgressDialog;
 import com.rahuljanagouda.popularmoviestwo.helper.GsonRequest;
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.MovieApiResponse;
 import com.rahuljanagouda.popularmoviestwo.utils.Network;
@@ -42,7 +44,9 @@ public class MovieListActivity extends AppCompatActivity {
     private Context mContext;
     private RecyclerView moviesGrid;
     private MovieApiResponse movieApiResponse = null;
+    private LinearLayout errorSection;
 
+    private MaterialProgressDialog materialProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,9 @@ public class MovieListActivity extends AppCompatActivity {
         });
 
         moviesGrid = (RecyclerView) findViewById(R.id.movie_list);
-        assert moviesGrid != null;
+
+        errorSection = (LinearLayout) findViewById(R.id.errorSection);
+
 
         if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the
@@ -75,12 +81,16 @@ public class MovieListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
+        materialProgressDialog = MaterialProgressDialog.show(mContext,"Listing movies...", false,true);
         if (savedInstanceState == null || !savedInstanceState.containsKey("MovieApiResponse")) {
             checkInternetAndRequestData();
         } else {
             movieApiResponse = savedInstanceState.getParcelable("MovieApiResponse");
             setupRecyclerView(moviesGrid, movieApiResponse);
         }
+
+//        materialProgressDialog.;
+
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, MovieApiResponse response) {
@@ -89,6 +99,8 @@ public class MovieListActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,10,true));
         recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        materialProgressDialog.dismiss();
+
     }
 
 
@@ -118,6 +130,7 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void makeNetworkRequest(int i) {
+
         String URL = Network.URL_TMDB_DISCOVER_MOVIES_POPULAR_API;
         if (i == 1) {
             URL = Network.URL_TMDB_DISCOVER_MOVIES_HIGHEST_RATED_API;
@@ -130,11 +143,16 @@ public class MovieListActivity extends AppCompatActivity {
                 movieApiResponse = response;
                 setupRecyclerView(moviesGrid, movieApiResponse);
 
+                materialProgressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                    setupRecyclerView(moviesGrid, null);
+
+                errorSection.setVisibility(View.VISIBLE);
+                moviesGrid.setVisibility(View.GONE);
+
+                materialProgressDialog.dismiss();
             }
         });
 
