@@ -28,6 +28,9 @@ public class Network {
     public static final String TMDB_VIDEO_URL = URL_TMDB_API_BASE + "{id}" + "/videos" + "?" +
             "api_key=" + TMDB_API_KEY;
 
+    public static final String TMDB_REVIEW_URL = URL_TMDB_API_BASE + "{id}" + "/reviews" + "?" +
+            "api_key=" + TMDB_API_KEY;
+
     public static boolean isOnline(Context mContext) {
         ConnectivityManager cm =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);

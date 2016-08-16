@@ -1,24 +1,19 @@
 package com.rahuljanagouda.popularmoviestwo.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
-import com.rahuljanagouda.popularmoviestwo.AppController;
 import com.rahuljanagouda.popularmoviestwo.R;
-import com.rahuljanagouda.popularmoviestwo.helper.GsonRequest;
+import com.rahuljanagouda.popularmoviestwo.adapters.MovieDetailsTabAdapter;
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.Result;
-import com.rahuljanagouda.popularmoviestwo.pojo.videos.VideoResponse;
-import com.rahuljanagouda.popularmoviestwo.utils.Network;
+import com.rahuljanagouda.popularmoviestwo.utils.General;
 
 import java.util.List;
 
@@ -44,6 +39,11 @@ public class MovieDetailFragment extends Fragment {
     public AppCompatActivity mContext;
 
     public Toolbar toolbar;
+    private ViewPager mViewPager;
+    private TabLayout tabLayout;
+    private MovieDetailsTabAdapter movieDetailsTabAdapter;
+
+
 
 
 
@@ -96,72 +96,27 @@ public class MovieDetailFragment extends Fragment {
         if (movieResult != null) {
 //            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(mItem.details);
 
-            String URL = Network.TMDB_VIDEO_URL.replace("{id}",String.valueOf(movieResult.getId()));
 
-            GsonRequest<VideoResponse> gsonRequest = new GsonRequest<>(URL, VideoResponse.class, new Response.Listener<VideoResponse>() {
-                @Override
-                public void onResponse(VideoResponse response) {
-                    videoResult = response.getResults();
-
-                    TextView movieVideos = (TextView) rootView.findViewById(R.id.movieVideos);
-                    movieVideos.setText(videoResult.get(0).getName());
-                    movieVideos.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Network.watchYoutubeVideo(mContext,videoResult.get(0).getKey());
-                        }
-                    });
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    videoResult = null;
-
-                    TextView movieVideos = (TextView) rootView.findViewById(R.id.movieVideos);
-                    movieVideos.setVisibility(View.GONE);
-                }
-            });
-            AppController.getInstance().addToRequestQueue(gsonRequest);
 
 
 //            if (mContext instanceof MovieDetailActivity){
-                ImageView movieThumb = (ImageView) rootView.findViewById(R.id.movieThumb);
-                if (movieResult.getPosterPath() != null) {
-                    Glide
-                            .with(mContext)
-                            .load(Network.TMDB_IMAGE_HQ_BASE_URL + movieResult.getPosterPath())
-                            .error(R.drawable.placeholder)
-                            .into(movieThumb);
-
-                } else {
-                    Glide
-                            .with(mContext)
-                            .load(R.drawable.placeholder)
-                            .into(movieThumb);
-                }
-
-//                toolbar = (Toolbar) mContext.findViewById(R.id.toolbar);
-//
-//                toolbar.setTitle(movieResult.getTitle());
-//
-//                mContext.setSupportActionBar(toolbar);
-//
-//                mContext.getSupportActionBar().setTitle(movieResult.getTitle());
-//
-//                mContext.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-//            }
+            movieDetailsTabAdapter = new MovieDetailsTabAdapter(getChildFragmentManager(), movieResult);
 
-            TextView movieOverview = (TextView) rootView.findViewById(R.id.movieOverview);
-            TextView movieTitle = (TextView) rootView.findViewById(R.id.movieTitle);
-            TextView movieRleaseDate = (TextView) rootView.findViewById(R.id.movieRleaseDate);
-            TextView movieRating = (TextView) rootView.findViewById(R.id.movieRating);
+            mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+            tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
 
-            movieOverview.setText(movieResult.getOverview());
-            movieRleaseDate.setText(movieResult.getReleaseDate());
-            movieRating.setText(String.valueOf(movieResult.getVoteAverage()));
-            movieTitle.setText(movieResult.getTitle());
+            mViewPager.setOffscreenPageLimit(2);
+            mViewPager.setAdapter(movieDetailsTabAdapter);
+
+            tabLayout.setTabTextColors(getResources().getColor(R.color.colorGrey100), getResources().getColor(R.color.primary_text));
+            tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.primary_text));
+            tabLayout.setSelectedTabIndicatorHeight(General.dpToPx(2, getActivity()));
+            tabLayout.setupWithViewPager(mViewPager);
+
+//            movieOverview.setText(movieResult.getOverview());
+
 
         }
 

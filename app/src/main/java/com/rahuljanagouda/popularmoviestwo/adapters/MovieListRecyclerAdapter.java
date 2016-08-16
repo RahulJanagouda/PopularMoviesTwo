@@ -23,13 +23,13 @@ import com.rahuljanagouda.popularmoviestwo.utils.Network;
 /**
  * Created by rahuljanagouda on 24/07/16.
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecyclerAdapter.ViewHolder> {
 
     private final Context mContext;
     private final MovieApiResponse pageResponse;
     private boolean mTwoPane;
 
-    public RecyclerAdapter(Context mContext, MovieApiResponse response, boolean mTwoPane) {
+    public MovieListRecyclerAdapter(Context mContext, MovieApiResponse response, boolean mTwoPane) {
         this.mContext = mContext;
         pageResponse = response;
         this.mTwoPane = mTwoPane;
@@ -37,7 +37,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_card,parent,false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_movie,parent,false);
         return new ViewHolder(v);
     }
 

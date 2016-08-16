@@ -9,6 +9,10 @@
     <color name="lighter_text">#b4b4b4</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+    <color name="grey_ec">#ececec</color>
+
+    <color name="colorGrey100">#f5f5f5</color>
+
 
 
     <color name="blackOverlay">#7e000000</color>

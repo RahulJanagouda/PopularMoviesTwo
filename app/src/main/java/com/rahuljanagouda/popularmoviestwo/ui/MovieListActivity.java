@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.rahuljanagouda.popularmoviestwo.AppController;
 import com.rahuljanagouda.popularmoviestwo.R;
 import com.rahuljanagouda.popularmoviestwo.adapters.GridSpacingItemDecoration;
-import com.rahuljanagouda.popularmoviestwo.adapters.RecyclerAdapter;
+import com.rahuljanagouda.popularmoviestwo.adapters.MovieListRecyclerAdapter;
 import com.rahuljanagouda.popularmoviestwo.customViews.MaterialProgressDialog;
 import com.rahuljanagouda.popularmoviestwo.helper.GsonRequest;
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.MovieApiResponse;
@@ -95,7 +95,7 @@ public class MovieListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, MovieApiResponse response) {
 
-        recyclerView.setAdapter(new RecyclerAdapter(mContext, response, mTwoPane));
+        recyclerView.setAdapter(new MovieListRecyclerAdapter(mContext, response, mTwoPane));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,10,true));
         recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
