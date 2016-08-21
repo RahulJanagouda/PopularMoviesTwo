@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.rahuljanagouda.popularmoviestwo.R;
 import com.rahuljanagouda.popularmoviestwo.adapters.MovieDetailsTabAdapter;
+import com.rahuljanagouda.popularmoviestwo.customViews.CustomTabLayout;
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.Result;
 import com.rahuljanagouda.popularmoviestwo.utils.General;
 
@@ -40,7 +41,7 @@ public class MovieDetailFragment extends Fragment {
 
     public Toolbar toolbar;
     private ViewPager mViewPager;
-    private TabLayout tabLayout;
+    private CustomTabLayout tabLayout;
     private MovieDetailsTabAdapter movieDetailsTabAdapter;
 
 
@@ -80,10 +81,6 @@ public class MovieDetailFragment extends Fragment {
 
             mContext = (AppCompatActivity) this.getActivity();
 
-
-
-
-
         }
     }
 
@@ -105,15 +102,15 @@ public class MovieDetailFragment extends Fragment {
             movieDetailsTabAdapter = new MovieDetailsTabAdapter(getChildFragmentManager(), movieResult);
 
             mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-            tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
+            tabLayout = (CustomTabLayout) rootView.findViewById(R.id.tabLayout);
 
             mViewPager.setOffscreenPageLimit(2);
             mViewPager.setAdapter(movieDetailsTabAdapter);
 
-            tabLayout.setTabTextColors(getResources().getColor(R.color.colorGrey100), getResources().getColor(R.color.primary_text));
-            tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.primary_text));
+            tabLayout.setTabTextColors(getResources().getColor(R.color.bluegrey_300), getResources().getColor(R.color.white));
+//            tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
             tabLayout.setSelectedTabIndicatorHeight(General.dpToPx(2, getActivity()));
-            tabLayout.setupWithViewPager(mViewPager);
+            tabLayout.setupWithViewPager(mViewPager,mContext);
 
 //            movieOverview.setText(movieResult.getOverview());
 

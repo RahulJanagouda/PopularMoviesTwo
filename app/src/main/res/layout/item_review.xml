@@ -23,7 +23,8 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
-        <TextView
+        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+            app:customFont="roboto-slab-regular"
             android:id="@+id/reviewUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +36,8 @@
             android:textColor="@color/black"
             android:textStyle="bold" />
 
-        <TextView
+        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+            app:customFont="roboto-mono-regular"
             android:id="@+id/reviewContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

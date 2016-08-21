@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.rahuljanagouda.popularmoviestwo.AppController;
 import com.rahuljanagouda.popularmoviestwo.R;
+import com.rahuljanagouda.popularmoviestwo.adapters.GridSpacingItemDecoration;
 import com.rahuljanagouda.popularmoviestwo.adapters.VideoListRecyclerAdapter;
 import com.rahuljanagouda.popularmoviestwo.helper.GsonRequest;
 import com.rahuljanagouda.popularmoviestwo.pojo.videos.Result;
@@ -142,9 +144,17 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
         noVideosView = view.findViewById(R.id.errorMessage);
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-        videosRecycler.setLayoutManager(linearLayoutManager);
+//        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+//        videosRecycler.setLayoutManager(linearLayoutManager);
 
+        videosRecycler.setHasFixedSize(true);
+        videosRecycler.addItemDecoration(new GridSpacingItemDecoration(2,3,true));
+        videosRecycler.setLayoutManager(new GridLayoutManager(mContext,2));
+
+
+
+//        int spacing = General.dpToPx(5, getActivity());
+//        videosRecycler.addItemDecoration(new VerticalSpaceItemDecoration(spacing));
 
         initAdapter(videos);
     }

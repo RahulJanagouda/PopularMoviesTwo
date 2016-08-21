@@ -46,7 +46,6 @@ public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecy
         Glide
                 .with(mContext)
                 .load("http://img.youtube.com/vi/" + video.getKey() + "/0.jpg")
-                .error(R.drawable.placeholder)
                 .into(holder.videoThumb);
 
         holder.videoName.setText(video.getName());

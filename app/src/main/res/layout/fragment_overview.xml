@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/bluegrey_100"
+
+    android:layout_height="match_parent">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:background="@color/bluegrey_100"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="5dp"
-            android:layout_margin="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -36,50 +39,84 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
                         android:id="@+id/movieTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:text="Batman v Superman: Dawn of justice"
                         android:textColor="@color/white"
+                        app:customFont="roboto-mono-regular"
                         android:textSize="30dp" />
 
-                    <TextView
-                        android:id="@+id/movieRating"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
                         android:padding="16dp"
-                        android:text="7.5/10"
-                        android:textColor="@color/white"
-                        android:textSize="10dp" />
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+                            android:id="@+id/movieRating"
+                            android:layout_width="wrap_content"
+                            app:customFont="roboto-mono-regular"
+                            android:layout_height="wrap_content"
+                            android:text="7.5"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+                        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+                            app:customFont="roboto-mono-regular"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/10"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
 
-                    <TextView
-                        android:id="@+id/movieRleaseDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:padding="16dp"
-                        android:text="In theateres : 23 March 2016"
-                        android:textColor="@color/white"
-                        android:textSize="10dp" />
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            app:customFont="roboto-mono-regular"
+                            android:layout_height="wrap_content"
+                            android:text="Release Date"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+                        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+                            app:customFont="roboto-mono-regular"
+                            android:id="@+id/movieRleaseDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="23 March 2016"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
-        <TextView
+
+        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+            app:customFont="roboto-slab-regular"
             android:id="@+id/overViewLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grey_ec"
-            android:padding="16dp"
+            android:background="@color/bluegrey_200"
+            android:padding="8dp"
             android:text="Discription"
             android:textColor="@color/primary_text"
             android:textSize="20sp" />
 
-        <TextView
+        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+            app:customFont="roboto-mono-regular"
             android:id="@+id/movieOverview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="16dp"
             android:text="@string/lorem_ipsum"
             android:textColor="@color/secondary_text"

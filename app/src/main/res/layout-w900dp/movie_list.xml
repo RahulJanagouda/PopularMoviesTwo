@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
@@ -21,20 +19,20 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/movie_list"
         android:name="com.rahuljanagouda.popularmoviestwo.MovieListFragment"
-        android:layout_width="@dimen/item_width"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.MovieListActivity"
+        android:layout_weight="2"
+        android:background="@color/bluegrey_100"
         tools:listitem="@layout/movie_list_content" />
 
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_weight="1"
+    <FrameLayout
         android:id="@+id/movie_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="3"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.MovieDetailActivity"
         tools:showIn="@layout/activity_movie_detail" />

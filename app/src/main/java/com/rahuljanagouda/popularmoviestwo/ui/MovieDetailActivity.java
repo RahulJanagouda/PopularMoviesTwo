@@ -24,6 +24,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +50,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.movie_detail_container, fragment)
+                    .replace(R.id.movie_detail_container, fragment)
                     .commit();
 //            movieResult = getArguments().getParcelable(MovieDetailFragment.MOVIE_RESULT_KEY);
         } else {

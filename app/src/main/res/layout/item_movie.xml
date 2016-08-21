@@ -19,7 +19,8 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder" />
-        <TextView
+        <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
+            app:customFont="roboto-mono-regular"
             android:textSize="15sp"
             android:padding="16dp"
             android:id="@+id/movieName"
