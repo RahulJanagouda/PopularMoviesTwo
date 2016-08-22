@@ -31,6 +31,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MovieListActivity" />
         </activity>
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".database.MoviesProvider"
+            android:exported="false"
+            android:syncable="true"/>
     </application>
 
 </manifest>

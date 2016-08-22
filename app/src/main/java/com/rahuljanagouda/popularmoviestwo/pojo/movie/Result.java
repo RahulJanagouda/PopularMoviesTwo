@@ -72,6 +72,8 @@ public class Result implements Parcelable {
     public Result() {
     }
 
+
+
     private Result(Parcel in) {
         this.posterPath = in.readString();
         this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
@@ -88,6 +90,36 @@ public class Result implements Parcelable {
         this.voteCount = (Integer) in.readValue(Integer.class.getClassLoader());
         this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
+    }
+
+    public Result(int movieId,
+                  boolean movieAdult,
+                  String moviePosterPath,
+                  String movieOverview,
+                  String movieReleaseDate,
+                  List<Integer> movieGenre,
+                  String movieOriginalTitle,
+                  String movieLanguage,
+                  String movieTitle,
+                  String movieBackdropPath,
+                  double moviePopularity,
+                  boolean movieVideo,
+                  double movieVoteAverage,
+                  int movieVoteCount) {
+        this.posterPath =moviePosterPath;
+        this.adult =movieAdult;
+        this.overview = movieOverview;
+        this.releaseDate = movieReleaseDate;
+        this.genreIds = movieGenre;
+        this.id = movieId;
+        this.originalTitle = movieOriginalTitle;
+        this.originalLanguage = movieLanguage;
+        this.title = movieTitle;
+        this.backdropPath = movieBackdropPath;
+        this.popularity = moviePopularity;
+        this.voteCount =movieVoteCount;
+        this.video = movieVideo;
+        this.voteAverage = movieVoteAverage;
     }
 
     /**
