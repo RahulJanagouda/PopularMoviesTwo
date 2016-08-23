@@ -35,6 +35,7 @@ import com.rahuljanagouda.popularmoviestwo.utils.Network;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * An activity representing a list of Movies. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -69,7 +70,6 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
         mContext = this;
 
-        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
 
 //        getWindow().getDecorView().setSystemUiVisibility(
@@ -94,8 +94,8 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
-        if(getSupportActionBar()!=null)
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +132,7 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
             mTwoPane = true;
         }
 
-        materialProgressDialog = MaterialProgressDialog.show(mContext,"Listing movies...", false,true);
+        materialProgressDialog = MaterialProgressDialog.show(mContext, "Listing movies...", false, true);
         if (savedInstanceState == null || !savedInstanceState.containsKey("MovieApiResponse")) {
             checkInternetAndRequestData();
         } else {
@@ -144,23 +144,23 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
     }
 
-    private void initAdapter(@NonNull RecyclerView recyclerView,MovieApiResponse response) {
+    private void initAdapter(@NonNull RecyclerView recyclerView, MovieApiResponse response) {
         showNoFavorite(false);
 
         recyclerView.setAdapter(new MovieListRecyclerAdapter(mContext, response, mTwoPane));
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,3,true));
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 3, true));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         materialProgressDialog.dismiss();
 
     }
 
-    private void showNoFavorite(boolean value){
+    private void showNoFavorite(boolean value) {
 
-        int noFavoriteVisibility = value? View.VISIBLE : View.GONE;
+        int noFavoriteVisibility = value ? View.VISIBLE : View.GONE;
         noFavorites.setVisibility(noFavoriteVisibility);
 
-        int recyclerViewVisibility = value? View.GONE : View.VISIBLE;
+        int recyclerViewVisibility = value ? View.GONE : View.VISIBLE;
         moviesGrid.setVisibility(recyclerViewVisibility);
     }
 
@@ -175,10 +175,10 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 //    }
 
 
-    private void checkInternetAndRequestData(){
-        if (Network.isOnline(mContext)){
+    private void checkInternetAndRequestData() {
+        if (Network.isOnline(mContext)) {
             makeNetworkRequest(1);
-        }else {
+        } else {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(this);
             builder.setTitle("No Internet Connection");
@@ -205,13 +205,13 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
         String URL;
 
-        switch (i){
+        switch (i) {
             case 1:
                 URL = Network.URL_TMDB_DISCOVER_MOVIES_HIGHEST_RATED_API;
                 break;
             case 2:
-                URL = Network.URL_TMDB_DISCOVER_MOVIES_HIGHEST_RATED_API;
-                break;
+                getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+                return;
             default:
                 URL = Network.URL_TMDB_DISCOVER_MOVIES_POPULAR_API;
 
@@ -261,8 +261,8 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(data.getCount()>0) {
-            initAdapter(moviesGrid,getMoviesFromCursor(data));
+        if (data.getCount() > 0) {
+            initAdapter(moviesGrid, getMoviesFromCursor(data));
         } else {
             showNoFavorite(true);
         }
@@ -278,11 +278,11 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
             /*Log.e("cursor length","->"+cursor.getCount());
             Log.e("column length","->"+cursor.getColumnCount());*/
 
-            if (cursor.moveToFirst()){
-                do{
+            if (cursor.moveToFirst()) {
+                do {
 
                     int movie_id = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_ID));
-                    boolean movie_adult = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_ADULT))==1;
+                    boolean movie_adult = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_ADULT)) == 1;
                     String movie_poster_path = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_POSTER_PATH));
                     String movie_overview = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_OVERVIEW));
                     String movie_release_date = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_RELEASE_DATE));
@@ -297,16 +297,16 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
                     String movie_language = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_LANGUAGE));
                     String movie_backdrop_path = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_BACKDROP_PATH));
                     String movie_popularity = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_POPULARITY));
-                    boolean movie_video = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_VIDEO))==1;
+                    boolean movie_video = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_VIDEO)) == 1;
                     String movie_vote_average = cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_VOTE_AVERAGE));
                     int movie_vote_count = cursor.getInt(cursor.getColumnIndex(MoviesContract.MoviesEntry.MOVIE_VOTE_COUNT));
 
-                    Result movie = new Result(movie_id,movie_adult, movie_poster_path, movie_overview, movie_release_date, movie_genre
-                            ,movie_original_title,movie_language,movie_title,movie_backdrop_path,Double.valueOf(movie_popularity),movie_video,Double.valueOf(movie_vote_average),movie_vote_count);
+                    Result movie = new Result(movie_id, movie_adult, movie_poster_path, movie_overview, movie_release_date, movie_genre
+                            , movie_original_title, movie_language, movie_title, movie_backdrop_path, Double.valueOf(movie_popularity), movie_video, Double.valueOf(movie_vote_average), movie_vote_count);
 
                     movies.add(movie);
 
-                }while(cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
 
         }

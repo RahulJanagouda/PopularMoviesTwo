@@ -1,14 +1,22 @@
 package com.rahuljanagouda.popularmoviestwo.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.rahuljanagouda.popularmoviestwo.R;
+import com.rahuljanagouda.popularmoviestwo.database.MoviesContract;
+import com.rahuljanagouda.popularmoviestwo.database.MoviesOpenHelper;
+import com.rahuljanagouda.popularmoviestwo.pojo.movie.Result;
+import com.rahuljanagouda.popularmoviestwo.utils.General;
 
 /**
  * An activity representing a single Movie detail screen. This
@@ -18,23 +26,47 @@ import com.rahuljanagouda.popularmoviestwo.R;
  */
 public class MovieDetailActivity extends AppCompatActivity {
 
+
+    private boolean isFavorite;
+    private Result movieResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
+        movieResult = getIntent().getParcelableExtra(MovieDetailFragment.MOVIE_RESULT_KEY);
+
+
+        isFavorite = General.isMovieFavorite(this, String.valueOf(movieResult.getId()));
+
+
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (isFavorite) {
+                    getContentResolver().delete(MoviesContract.MoviesEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieResult.getId())).build(), null, null);
+                    isFavorite = false;
+                    Snackbar.make(view, "Removed", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    ContentValues values = MoviesOpenHelper.getMovieContentValues(movieResult);
+                    getContentResolver().insert(MoviesContract.MoviesEntry.CONTENT_URI, values);
+                    isFavorite = true;
+                    Snackbar.make(view, "Saved", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+
+
+            }
+        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();

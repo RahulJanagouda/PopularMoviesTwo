@@ -1,7 +1,6 @@
 package com.rahuljanagouda.popularmoviestwo.ui;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +42,8 @@ public class MovieDetailFragment extends Fragment {
     private ViewPager mViewPager;
     private CustomTabLayout tabLayout;
     private MovieDetailsTabAdapter movieDetailsTabAdapter;
+
+    private boolean isFavorite;
 
 
 

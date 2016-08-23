@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 
 public class MoviesContract {
 
-	public static final String CONTENT_AUTHORITY = "com.vipul.popularmovies";
+	public static final String CONTENT_AUTHORITY = "com.rahuljanagouda.popularmoviestwo";
 
 	public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 

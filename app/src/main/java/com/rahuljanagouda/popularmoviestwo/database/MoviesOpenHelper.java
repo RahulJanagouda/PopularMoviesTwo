@@ -8,9 +8,7 @@ import android.util.Log;
 
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.Result;
 
-/**
- * Created by HP-HP on 30-05-2016.
- */
+
 public class MoviesOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME ="MOVIES_DB";
