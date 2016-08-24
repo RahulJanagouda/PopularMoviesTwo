@@ -24,7 +24,10 @@ public class OverviewFragment extends Fragment {
     private TextView movieOverview,movieTitle,movieRleaseDate,movieRating;
     private Result movie;
     ImageView movieThumb;
+    ImageView favoriteImage;
     Context mContext;
+    private boolean isFavorite;
+
 
     public static OverviewFragment newInstance(Result movie){
         if (movie == null){
@@ -57,6 +60,7 @@ public class OverviewFragment extends Fragment {
         movieRleaseDate = (TextView) view.findViewById(R.id.movieRleaseDate);
         movieRating = (TextView) view.findViewById(R.id.movieRating);
         movieThumb = (ImageView) view.findViewById(R.id.movieThumb);
+        favoriteImage = (ImageView) view.findViewById(R.id.favoriteImage);
 
         inflateData();
     }

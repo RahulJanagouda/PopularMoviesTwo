@@ -27,7 +27,6 @@ import com.rahuljanagouda.popularmoviestwo.utils.General;
 public class MovieDetailActivity extends AppCompatActivity {
 
 
-    private boolean isFavorite;
     private Result movieResult;
 
     @Override
