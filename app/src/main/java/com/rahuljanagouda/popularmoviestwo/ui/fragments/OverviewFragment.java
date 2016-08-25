@@ -1,19 +1,28 @@
 package com.rahuljanagouda.popularmoviestwo.ui.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.rahuljanagouda.popularmoviestwo.R;
+import com.rahuljanagouda.popularmoviestwo.database.DatabaseChangedReceiver;
+import com.rahuljanagouda.popularmoviestwo.database.MoviesContract;
+import com.rahuljanagouda.popularmoviestwo.database.MoviesOpenHelper;
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.Result;
 import com.rahuljanagouda.popularmoviestwo.utils.Constatns;
+import com.rahuljanagouda.popularmoviestwo.utils.General;
 import com.rahuljanagouda.popularmoviestwo.utils.Network;
 
 /**
@@ -27,6 +36,7 @@ public class OverviewFragment extends Fragment {
     ImageView favoriteImage;
     Context mContext;
     private boolean isFavorite;
+    protected Animation pulseAnimation;
 
 
     public static OverviewFragment newInstance(Result movie){
@@ -47,6 +57,10 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = this.getActivity();
+
+        pulseAnimation = AnimationUtils.loadAnimation(mContext, R.anim.pulse);
+
+
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
@@ -55,6 +69,9 @@ public class OverviewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         movie = getArguments().getParcelable(Constatns.MOVIE_PARCEL_KEY);
+
+        isFavorite = General.isMovieFavorite(mContext, String.valueOf(movie.getId()));
+
         movieOverview = (TextView) view.findViewById(R.id.movieOverview);
         movieTitle = (TextView) view.findViewById(R.id.movieTitle);
         movieRleaseDate = (TextView) view.findViewById(R.id.movieRleaseDate);
@@ -82,8 +99,38 @@ public class OverviewFragment extends Fragment {
                     .into(movieThumb);
         }
 
-        movieOverview.setText(movie.getOverview());
+        if (isFavorite) {
+            favoriteImage.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            favoriteImage.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
 
+        favoriteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFavorite) {
+                    favoriteImage.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    favoriteImage.startAnimation(pulseAnimation);
+                    mContext.getContentResolver().delete(MoviesContract.MoviesEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movie.getId())).build(), null, null);
+                    mContext.sendBroadcast(new Intent(DatabaseChangedReceiver.ACTION_DATABASE_CHANGED));
+                    isFavorite = false;
+                    Toast.makeText(mContext, "Removed", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    favoriteImage.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    favoriteImage.startAnimation(pulseAnimation);
+                    ContentValues values = MoviesOpenHelper.getMovieContentValues(movie);
+                    mContext.getContentResolver().insert(MoviesContract.MoviesEntry.CONTENT_URI, values);
+                    mContext.sendBroadcast(new Intent(DatabaseChangedReceiver.ACTION_DATABASE_CHANGED));
+                    isFavorite = true;
+                    Toast.makeText(mContext, "Saved", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+
+        movieOverview.setText(movie.getOverview());
         movieRleaseDate.setText(movie.getReleaseDate());
         movieRating.setText(String.valueOf(movie.getVoteAverage()));
         movieTitle.setText(movie.getTitle());

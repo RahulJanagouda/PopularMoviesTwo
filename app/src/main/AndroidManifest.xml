@@ -36,6 +36,13 @@
             android:name=".database.MoviesProvider"
             android:exported="false"
             android:syncable="true"/>
+        <receiver
+            android:name=".database.DatabaseChangedReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="com.rahuljanagouda.popularmoviestwo"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

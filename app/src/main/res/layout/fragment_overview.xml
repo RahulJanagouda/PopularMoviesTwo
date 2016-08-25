@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <ImageView
+                        android:clickable="true"
                         android:id="@+id/favoriteImage"
                         android:padding="16dp"
                         android:layout_gravity="end"

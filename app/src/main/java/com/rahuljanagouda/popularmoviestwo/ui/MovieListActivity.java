@@ -2,6 +2,7 @@ package com.rahuljanagouda.popularmoviestwo.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.rahuljanagouda.popularmoviestwo.R;
 import com.rahuljanagouda.popularmoviestwo.adapters.GridSpacingItemDecoration;
 import com.rahuljanagouda.popularmoviestwo.adapters.MovieListRecyclerAdapter;
 import com.rahuljanagouda.popularmoviestwo.customViews.MaterialProgressDialog;
+import com.rahuljanagouda.popularmoviestwo.database.DatabaseChangedReceiver;
 import com.rahuljanagouda.popularmoviestwo.database.MoviesContract;
 import com.rahuljanagouda.popularmoviestwo.helper.GsonRequest;
 import com.rahuljanagouda.popularmoviestwo.pojo.movie.MovieApiResponse;
@@ -52,7 +54,7 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
      */
     private boolean mTwoPane;
 
-    private Context mContext;
+    private Context mContext = this;
     private RecyclerView moviesGrid;
     private MovieApiResponse movieApiResponse = null;
     private LinearLayout errorSection;
@@ -63,14 +65,12 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
     private static final int CURSOR_LOADER_ID = 0;
 
+    private DatabaseChangedReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
-
-        mContext = this;
-
-
 
 //        getWindow().getDecorView().setSystemUiVisibility(
 //                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -140,9 +140,15 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
             initAdapter(moviesGrid, movieApiResponse);
         }
 
+        mReceiver = new DatabaseChangedReceiver() {
+            public void onReceive(Context context, Intent intent) {
+            }
+        };
+
 //        materialProgressDialog.;
 
     }
+
 
     private void initAdapter(@NonNull RecyclerView recyclerView, MovieApiResponse response) {
         showNoFavorite(false);
