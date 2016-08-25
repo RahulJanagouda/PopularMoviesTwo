@@ -24,7 +24,6 @@
             app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
         <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
-            app:customFont="roboto-slab-regular"
             android:id="@+id/reviewUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,12 +31,12 @@
             android:layout_toEndOf="@+id/reviewAvatar"
             android:layout_toRightOf="@+id/reviewAvatar"
             android:padding="8dp"
-            android:text="Username"
+            android:text="@string/username"
             android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:customFont="roboto-slab-regular" />
 
         <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
-            app:customFont="roboto-mono-regular"
             android:id="@+id/reviewContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +45,8 @@
             android:layout_toRightOf="@+id/reviewAvatar"
             android:padding="8dp"
             android:text="@string/lorem_ipsum"
-            android:textColor="@color/primary_text" />
+            android:textColor="@color/primary_text"
+            app:customFont="roboto-mono-regular" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

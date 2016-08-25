@@ -1,6 +1,8 @@
 package com.rahuljanagouda.popularmoviestwo.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,22 +33,13 @@ public class MovieDetailFragment extends Fragment {
      */
 
     public static final String MOVIE_RESULT_KEY = "movieResultKey";
-
+    public List<com.rahuljanagouda.popularmoviestwo.pojo.videos.Result> videoResult;
+    public AppCompatActivity mContext;
+    public Toolbar toolbar;
+    @Nullable
     private Result movieResult;
 
-    public List<com.rahuljanagouda.popularmoviestwo.pojo.videos.Result> videoResult;
-
-    public AppCompatActivity mContext;
-
-    public Toolbar toolbar;
-    private ViewPager mViewPager;
-    private CustomTabLayout tabLayout;
-    private MovieDetailsTabAdapter movieDetailsTabAdapter;
-
     private boolean isFavorite;
-
-
-
 
 
     /**
@@ -57,7 +50,7 @@ public class MovieDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(MOVIE_RESULT_KEY)) {
@@ -86,7 +79,7 @@ public class MovieDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.content_details, container, false);
 
@@ -95,15 +88,13 @@ public class MovieDetailFragment extends Fragment {
 //            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(mItem.details);
 
 
-
-
 //            if (mContext instanceof MovieDetailActivity){
 
 
-            movieDetailsTabAdapter = new MovieDetailsTabAdapter(getChildFragmentManager(), movieResult);
+            MovieDetailsTabAdapter movieDetailsTabAdapter = new MovieDetailsTabAdapter(getChildFragmentManager(), movieResult);
 
-            mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-            tabLayout = (CustomTabLayout) rootView.findViewById(R.id.tabLayout);
+            ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+            CustomTabLayout tabLayout = (CustomTabLayout) rootView.findViewById(R.id.tabLayout);
 
             mViewPager.setOffscreenPageLimit(2);
             mViewPager.setAdapter(movieDetailsTabAdapter);
@@ -111,7 +102,7 @@ public class MovieDetailFragment extends Fragment {
             tabLayout.setTabTextColors(getResources().getColor(R.color.bluegrey_300), getResources().getColor(R.color.white));
 //            tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
             tabLayout.setSelectedTabIndicatorHeight(General.dpToPx(2, getActivity()));
-            tabLayout.setupWithViewPager(mViewPager,mContext);
+            tabLayout.setupWithViewPager(mViewPager, mContext);
 
 //            movieOverview.setText(movieResult.getOverview());
 

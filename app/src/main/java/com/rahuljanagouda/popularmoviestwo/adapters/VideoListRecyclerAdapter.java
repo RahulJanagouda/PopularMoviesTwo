@@ -1,6 +1,7 @@
 package com.rahuljanagouda.popularmoviestwo.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,28 +20,24 @@ import java.util.List;
 public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecyclerAdapter.ViewHolder> {
 
 
-    public interface Callback {
-        public void onVideoClick(Result video);
-    }
-
-
-    Callback mCallback;
-    Context mContext;
-    List<Result> videos;
+    private final Context mContext;
+    private final List<Result> videos;
+    private Callback mCallback;
 
     public VideoListRecyclerAdapter(Context mContext, List<Result> videos) {
         this.mContext = mContext;
         this.videos = videos;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = View.inflate(parent.getContext(), R.layout.item_video, null);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Result video = videos.get(position);
 
         Glide
@@ -53,7 +50,7 @@ public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mCallback!=null) {
+                if (mCallback != null) {
                     mCallback.onVideoClick(video);
                 }
             }
@@ -66,19 +63,23 @@ public class VideoListRecyclerAdapter extends RecyclerView.Adapter<VideoListRecy
         return (videos != null ? videos.size() : 0);
     }
 
+    public void setCallback(Callback callback) {
+        this.mCallback = callback;
+    }
+
+    public interface Callback {
+        void onVideoClick(Result video);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView videoThumb;
-        TextView videoName;
+        final ImageView videoThumb;
+        final TextView videoName;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             videoThumb = (ImageView) itemView.findViewById(R.id.videoThumb);
             videoName = (TextView) itemView.findViewById(R.id.videoName);
         }
-    }
-
-    public void setCallback(Callback callback) {
-        this.mCallback = callback;
     }
 }

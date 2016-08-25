@@ -1,7 +1,7 @@
 package com.rahuljanagouda.popularmoviestwo;
 
 import android.app.Application;
-import android.text.TextUtils;
+import android.support.annotation.NonNull;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,19 +36,9 @@ public class AppController extends Application {
         return mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(req);
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
+    public <T> void addToRequestQueue(@NonNull Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
     }
 
-    public void cancelPendingRequests(Object tag) {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(tag);
-        }
-    }
 }

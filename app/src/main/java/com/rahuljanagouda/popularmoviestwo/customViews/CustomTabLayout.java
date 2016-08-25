@@ -2,6 +2,7 @@ package com.rahuljanagouda.popularmoviestwo.customViews;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
@@ -15,17 +16,15 @@ import android.view.ViewGroup;
  */
 public class CustomTabLayout extends TabLayout {
 
-    Context mContext;
-    public CustomTabLayout(Context context) {
+    public CustomTabLayout(@NonNull Context context) {
         super(context);
-        mContext = context;
     }
 
-    public CustomTabLayout(Context context, AttributeSet attrs) {
+    public CustomTabLayout(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomTabLayout(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -36,21 +35,20 @@ public class CustomTabLayout extends TabLayout {
 
     }
 
-    public void setupWithViewPager(@Nullable ViewPager viewPager, Context mContext) {
+    public void setupWithViewPager(@Nullable ViewPager viewPager, @NonNull Context mContext) {
         setupWithViewPager(viewPager);
 
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "fonts/roboto-slab-bold.ttf");
 
-        if (tf != null)
-        {
+        if (tf != null) {
             this.removeAllTabs();
 
             ViewGroup slidingTabStrip = (ViewGroup) getChildAt(0);
 
+            assert viewPager != null;
             PagerAdapter adapter = viewPager.getAdapter();
 
-            for (int i = 0, count = adapter.getCount(); i < count; i++)
-            {
+            for (int i = 0, count = adapter.getCount(); i < count; i++) {
                 Tab tab = this.newTab();
                 this.addTab(tab.setText(adapter.getPageTitle(i)));
                 AppCompatTextView view = (AppCompatTextView) ((ViewGroup) slidingTabStrip.getChildAt(i)).getChildAt(1);

@@ -3,11 +3,13 @@ package com.rahuljanagouda.popularmoviestwo.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -48,29 +51,73 @@ import java.util.List;
  */
 public class MovieListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int CURSOR_LOADER_ID = 0;
+    private static final int FAVORITE_SORT_ORDER = 2;
+    private static final int DELAY_MILLIS = 50;
+    private static int sortByOption;
+    @NonNull
+    private final Context mContext = this;
+    @NonNull
+    private final DatabaseChangedReceiver mReceiver = new DatabaseChangedReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            getSupportLoaderManager().restartLoader(CURSOR_LOADER_ID, null, (MovieListActivity) mContext);
+        }
+    };
+    private Loader<Cursor> loaderManager;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
-
-    private Context mContext = this;
     private RecyclerView moviesGrid;
+    @Nullable
     private MovieApiResponse movieApiResponse = null;
     private LinearLayout errorSection;
-
     private MaterialProgressDialog materialProgressDialog;
-
     private TextView noFavorites;
-
-    private static final int CURSOR_LOADER_ID = 0;
-
-    private DatabaseChangedReceiver mReceiver;
+    private SharedPreferences sharedPref;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+
+
+//      Set the toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+//      Set the shared Preferences and default/last sort option
+        sharedPref = mContext.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        sortByOption = sharedPref.getInt(getString(R.string.last_sort_order), 0);
+
+
+//        Set the floating action button
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Sort By")
+                        .setItems(R.array.sort_by, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                makeNetworkRequest(which);
+
+                            }
+                        });
+                builder.create().show();
+            }
+        });
+
+//      Find Views
+        noFavorites = (TextView) findViewById(R.id.noFavorites);
+        moviesGrid = (RecyclerView) findViewById(R.id.movie_list);
+        errorSection = (LinearLayout) findViewById(R.id.errorSection);
 
 //        getWindow().getDecorView().setSystemUiVisibility(
 //                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -89,40 +136,6 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 //                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 //        }
 
-        noFavorites = (TextView) findViewById(R.id.noFavorites);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-//        toolbar.setTitle(getTitle());
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Sort By")
-                        .setItems(R.array.sort_by, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                                makeNetworkRequest(which);
-
-                            }
-                        });
-                builder.create().show();
-
-                Snackbar.make(view, "Sorted by ", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        moviesGrid = (RecyclerView) findViewById(R.id.movie_list);
-
-        errorSection = (LinearLayout) findViewById(R.id.errorSection);
-
 
         if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the
@@ -134,29 +147,36 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
         materialProgressDialog = MaterialProgressDialog.show(mContext, "Listing movies...", false, true);
         if (savedInstanceState == null || !savedInstanceState.containsKey("MovieApiResponse")) {
-            checkInternetAndRequestData();
+            checkInternetAndRequestData(sortByOption);
         } else {
             movieApiResponse = savedInstanceState.getParcelable("MovieApiResponse");
             initAdapter(moviesGrid, movieApiResponse);
         }
 
-        mReceiver = new DatabaseChangedReceiver() {
-            public void onReceive(Context context, Intent intent) {
-            }
-        };
 
 //        materialProgressDialog.;
 
     }
 
 
-    private void initAdapter(@NonNull RecyclerView recyclerView, MovieApiResponse response) {
+    private void initAdapter(@NonNull final RecyclerView recyclerView, MovieApiResponse response) {
         showNoFavorite(false);
 
         recyclerView.setAdapter(new MovieListRecyclerAdapter(mContext, response, mTwoPane));
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 3, true));
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(FAVORITE_SORT_ORDER, 3, true));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, FAVORITE_SORT_ORDER));
+
+
+        if (mTwoPane) {
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.findViewHolderForAdapterPosition(0).itemView.performClick();
+                }
+            }, DELAY_MILLIS);
+        }
+
         materialProgressDialog.dismiss();
 
     }
@@ -170,20 +190,10 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
         moviesGrid.setVisibility(recyclerViewVisibility);
     }
 
-//    private void setupRecyclerView(@NonNull RecyclerView recyclerView, MovieApiResponse response) {
-//
-//        recyclerView.setAdapter(new MovieListRecyclerAdapter(mContext, response, mTwoPane));
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,3,true));
-//        recyclerView.setLayoutManager(new GridLayoutManager(mContext,2));
-//        materialProgressDialog.dismiss();
-//
-//    }
 
-
-    private void checkInternetAndRequestData() {
+    private void checkInternetAndRequestData(final int sortByOption) {
         if (Network.isOnline(mContext)) {
-            makeNetworkRequest(1);
+            makeNetworkRequest(sortByOption);
         } else {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(this);
@@ -198,7 +208,7 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
             builder.setNeutralButton("Retry", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    checkInternetAndRequestData();
+                    checkInternetAndRequestData(sortByOption);
                 }
             });
             builder.setCancelable(false);
@@ -208,20 +218,22 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
     private void makeNetworkRequest(int i) {
 
-
         String URL;
+        sortByOption = i;
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.last_sort_order), sortByOption);
+        editor.commit();
 
         switch (i) {
             case 1:
                 URL = Network.URL_TMDB_DISCOVER_MOVIES_HIGHEST_RATED_API;
                 break;
             case 2:
-                getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+                loaderManager = getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
                 return;
             default:
                 URL = Network.URL_TMDB_DISCOVER_MOVIES_POPULAR_API;
-
-
         }
 
         GsonRequest<MovieApiResponse> gsonRequest = new GsonRequest<>(URL, MovieApiResponse.class, new Response.Listener<MovieApiResponse>() {
@@ -230,7 +242,6 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
                 assert moviesGrid != null;
                 movieApiResponse = response;
                 initAdapter(moviesGrid, movieApiResponse);
-
                 materialProgressDialog.dismiss();
 
             }
@@ -240,21 +251,19 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
 
                 errorSection.setVisibility(View.VISIBLE);
                 moviesGrid.setVisibility(View.GONE);
-
                 materialProgressDialog.dismiss();
             }
         });
-
-
         AppController.getInstance().addToRequestQueue(gsonRequest);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable("MovieApiResponse", movieApiResponse);
         super.onSaveInstanceState(outState);
     }
 
+    @Nullable
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(mContext,
@@ -266,16 +275,21 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.getCount() > 0) {
-            initAdapter(moviesGrid, getMoviesFromCursor(data));
-        } else {
-            showNoFavorite(true);
+    public void onLoadFinished(Loader<Cursor> loader, @NonNull Cursor data) {
+        if (sortByOption == FAVORITE_SORT_ORDER) {
+            if (data.getCount() > 0) {
+                initAdapter(moviesGrid, getMoviesFromCursor(data));
+            } else if (mTwoPane) {
+                Toast.makeText(MovieListActivity.this, "Nothing saved yet", Toast.LENGTH_SHORT).show();
+            } else {
+                showNoFavorite(true);
+            }
         }
     }
 
 
-    private MovieApiResponse getMoviesFromCursor(Cursor cursor) {
+    @NonNull
+    private MovieApiResponse getMoviesFromCursor(@Nullable Cursor cursor) {
 
         MovieApiResponse movieApiResponse = new MovieApiResponse();
         List<Result> movies = new ArrayList<>();
@@ -326,5 +340,19 @@ public class MovieListActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, new IntentFilter(DatabaseChangedReceiver.ACTION_DATABASE_CHANGED));
+        getSupportLoaderManager().restartLoader(CURSOR_LOADER_ID, null, (MovieListActivity) mContext);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
     }
 }

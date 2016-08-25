@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,22 +31,23 @@ import com.rahuljanagouda.popularmoviestwo.utils.Network;
  */
 public class OverviewFragment extends Fragment {
 
-    private TextView movieOverview,movieTitle,movieRleaseDate,movieRating;
+    private Animation pulseAnimation;
+    private ImageView movieThumb;
+    private ImageView favoriteImage;
+    private Context mContext;
+    private TextView movieOverview, movieTitle, movieRleaseDate, movieRating;
+    @Nullable
     private Result movie;
-    ImageView movieThumb;
-    ImageView favoriteImage;
-    Context mContext;
     private boolean isFavorite;
-    protected Animation pulseAnimation;
 
-
-    public static OverviewFragment newInstance(Result movie){
-        if (movie == null){
+    @NonNull
+    public static OverviewFragment newInstance(@Nullable Result movie) {
+        if (movie == null) {
             throw new IllegalArgumentException("Movie cant be null");
         }
 
         Bundle args = new Bundle();
-        args.putParcelable(Constatns.MOVIE_PARCEL_KEY,movie);
+        args.putParcelable(Constatns.MOVIE_PARCEL_KEY, movie);
 
         OverviewFragment fragment = new OverviewFragment();
         fragment.setArguments(args);
@@ -55,7 +57,7 @@ public class OverviewFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = this.getActivity();
 
         pulseAnimation = AnimationUtils.loadAnimation(mContext, R.anim.pulse);
@@ -65,7 +67,7 @@ public class OverviewFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         movie = getArguments().getParcelable(Constatns.MOVIE_PARCEL_KEY);

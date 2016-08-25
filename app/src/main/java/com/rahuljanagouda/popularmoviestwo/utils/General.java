@@ -3,6 +3,7 @@ package com.rahuljanagouda.popularmoviestwo.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
 import com.rahuljanagouda.popularmoviestwo.database.MoviesContract;
@@ -11,16 +12,16 @@ import com.rahuljanagouda.popularmoviestwo.database.MoviesContract;
  * Created by rahuljanagouda on 15/08/16.
  */
 public class General {
-    public static int dpToPx(float dp, Context context) {
+    public static int dpToPx(float dp, @NonNull Context context) {
         return dpToPx(dp, context.getResources());
     }
 
-    public static int dpToPx(float dp, Resources resources) {
+    private static int dpToPx(float dp, @NonNull Resources resources) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
         return (int) px;
     }
 
-    public static boolean isMovieFavorite(Context mContext, String movieIdForSearch){
+    public static boolean isMovieFavorite(@NonNull Context mContext, String movieIdForSearch) {
 
         String[] mProjection =
                 {
@@ -37,12 +38,9 @@ public class General {
                 mSelectionClause,
                 mSelectionArgs,
                 null
-                );
+        );
 
-        if (mCursor != null && mCursor.getCount() >0){
-            return true;
-        }
+        return mCursor != null && mCursor.getCount() > 0;
 
-        return false;
     }
 }

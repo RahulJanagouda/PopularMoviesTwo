@@ -2,6 +2,7 @@ package com.rahuljanagouda.popularmoviestwo.pojo.reviews;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,6 +12,19 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Result implements Parcelable {
 
+    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
+        @NonNull
+        @Override
+        public Result createFromParcel(@NonNull Parcel source) {
+            return new Result(source);
+        }
+
+        @NonNull
+        @Override
+        public Result[] newArray(int size) {
+            return new Result[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private String id;
@@ -23,6 +37,16 @@ public class Result implements Parcelable {
     @SerializedName("url")
     @Expose
     private String url;
+
+    public Result() {
+    }
+
+    private Result(@NonNull Parcel in) {
+        this.id = in.readString();
+        this.author = in.readString();
+        this.content = in.readString();
+        this.url = in.readString();
+    }
 
     /**
      * @return The id
@@ -86,32 +110,10 @@ public class Result implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.author);
         dest.writeString(this.content);
         dest.writeString(this.url);
     }
-
-    public Result() {
-    }
-
-    protected Result(Parcel in) {
-        this.id = in.readString();
-        this.author = in.readString();
-        this.content = in.readString();
-        this.url = in.readString();
-    }
-
-    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
-        @Override
-        public Result createFromParcel(Parcel source) {
-            return new Result(source);
-        }
-
-        @Override
-        public Result[] newArray(int size) {
-            return new Result[size];
-        }
-    };
 }

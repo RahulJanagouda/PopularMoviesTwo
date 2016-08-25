@@ -3,6 +3,7 @@ package com.rahuljanagouda.popularmoviestwo.ui.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -32,13 +33,14 @@ import java.util.List;
 public class ReviewsFragment extends Fragment {
     private Context mContext;
     private RecyclerView reviewRecycler;
-    private LinearLayoutManager linearLayoutManager;
-    private ReviewsListRecyclerAdapter reviewsAdapter;
+    @Nullable
     private List<Result> reviews = new ArrayList<>();
+    @Nullable
     private com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie;
     private View noReviewsView;
 
-    public static ReviewsFragment newInstance(com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie){
+    @NonNull
+    public static ReviewsFragment newInstance(@Nullable com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie) {
         if (movie == null) {
             throw new IllegalArgumentException("The Movies Data can not be null");
         }
@@ -59,17 +61,17 @@ public class ReviewsFragment extends Fragment {
     }
 
 
-    private void checkInternetAndRequestData(){
-        if (Network.isOnline(mContext)){
+    private void checkInternetAndRequestData() {
+        if (Network.isOnline(mContext)) {
             getReviewsData();
-        }else {
+        } else {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(mContext);
             builder.setTitle("No Internet Connection");
             builder.setMessage("Oops, No internet connection found. Please connect and retry again.");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(@NonNull DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
@@ -85,14 +87,14 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void getReviewsData() {
-        String URL = Network.TMDB_REVIEW_URL.replace("{id}",String.valueOf(movie.getId()));
+        String URL = Network.TMDB_REVIEW_URL.replace("{id}", String.valueOf(movie.getId()));
 
         GsonRequest<ReviewsResponse> gsonRequest = new GsonRequest<>(URL, ReviewsResponse.class, new Response.Listener<ReviewsResponse>() {
             @Override
-            public void onResponse(ReviewsResponse response) {
+            public void onResponse(@NonNull ReviewsResponse response) {
 //                reviews = response.getResults();
 
-                if(response.getTotalResults()>0) {
+                if (response.getTotalResults() > 0) {
                     initAdapter(response.getResults());
                 } else {
                     showNoReviews(true);
@@ -109,24 +111,24 @@ public class ReviewsFragment extends Fragment {
 
     private void initAdapter(List<Result> reviews) {
         showNoReviews(false);
-        reviewsAdapter = new ReviewsListRecyclerAdapter(mContext,reviews);
+        ReviewsListRecyclerAdapter reviewsAdapter = new ReviewsListRecyclerAdapter(mContext, reviews);
         reviewRecycler.setAdapter(reviewsAdapter);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_reviews, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         reviewRecycler = (RecyclerView) view.findViewById(R.id.reviewsRecycler);
         noReviewsView = view.findViewById(R.id.errorMessage);
 
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         reviewRecycler.setLayoutManager(linearLayoutManager);
 //        int spacing = General.dpToPx(5, getActivity());
 //        reviewRecycler.addItemDecoration(new VerticalSpaceItemDecoration(spacing));
@@ -134,12 +136,12 @@ public class ReviewsFragment extends Fragment {
         initAdapter(reviews);
     }
 
-    private void showNoReviews(boolean value){
+    private void showNoReviews(boolean value) {
 
-        int noReviewsVisibility = value? View.VISIBLE : View.GONE;
+        int noReviewsVisibility = value ? View.VISIBLE : View.GONE;
         noReviewsView.setVisibility(noReviewsVisibility);
 
-        int recyclerViewVisibility = value? View.GONE : View.VISIBLE;
+        int recyclerViewVisibility = value ? View.GONE : View.VISIBLE;
         reviewRecycler.setVisibility(recyclerViewVisibility);
     }
 }

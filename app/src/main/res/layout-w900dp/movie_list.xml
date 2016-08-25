@@ -21,10 +21,10 @@
         android:name="com.rahuljanagouda.popularmoviestwo.MovieListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.MovieListActivity"
         android:layout_weight="2"
         android:background="@color/bluegrey_100"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.MovieListActivity"
         tools:listitem="@layout/movie_list_content" />
 
 
@@ -35,6 +35,13 @@
         android:layout_weight="3"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.MovieDetailActivity"
-        tools:showIn="@layout/activity_movie_detail" />
+        tools:showIn="@layout/activity_movie_detail">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/pick_one" />
+    </FrameLayout>
 
 </LinearLayout>

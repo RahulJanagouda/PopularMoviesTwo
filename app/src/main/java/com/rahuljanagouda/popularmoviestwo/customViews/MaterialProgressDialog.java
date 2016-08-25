@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,20 +19,21 @@ import com.rahuljanagouda.popularmoviestwo.R;
 public class MaterialProgressDialog extends Dialog implements OnDismissListener {
 
     //    static ProgressHUD dialog;
-    private Context ctx;
+    private final Context ctx;
 
-    public MaterialProgressDialog(Context context) {
+    public MaterialProgressDialog(@NonNull Context context) {
         super(context);
         ctx = context;
     }
 
-    public MaterialProgressDialog(Context context, int theme) {
+    private MaterialProgressDialog(@NonNull Context context, int theme) {
         super(context, theme);
         ctx = context;
     }
 
+    @NonNull
     @SuppressLint("NewApi")
-    public static MaterialProgressDialog show(final Context context, CharSequence message, boolean indeterminate, boolean cancelable) {
+    public static MaterialProgressDialog show(@NonNull final Context context, @Nullable CharSequence message, boolean indeterminate, boolean cancelable) {
         MaterialProgressDialog dialog = new MaterialProgressDialog(context, R.style.ProgressHUD);
         try {
             dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -79,7 +82,7 @@ public class MaterialProgressDialog extends Dialog implements OnDismissListener 
     public void onWindowFocusChanged(boolean hasFocus) {
     }
 
-    public void setMessage(CharSequence message) {
+    public void setMessage(@Nullable CharSequence message) {
         if (message != null && message.length() > 0) {
             findViewById(R.id.message).setVisibility(View.VISIBLE);
             TextView txt = (TextView) findViewById(R.id.message);

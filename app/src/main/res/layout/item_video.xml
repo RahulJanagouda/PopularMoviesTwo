@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:orientation="vertical"
     app:cardCornerRadius="2dp"
     app:cardElevation="4dp"
-    android:layout_gravity="center"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -15,14 +15,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:adjustViewBounds="true"
             android:id="@+id/videoThumb"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop" />
 
         <com.rahuljanagouda.popularmoviestwo.customViews.CustomTextView
-            app:customFont="roboto-mono-regular"
             android:id="@+id/videoName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +30,8 @@
             android:padding="8dp"
             android:text="@string/na"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            app:customFont="roboto-mono-regular" />
 
     </LinearLayout>
 

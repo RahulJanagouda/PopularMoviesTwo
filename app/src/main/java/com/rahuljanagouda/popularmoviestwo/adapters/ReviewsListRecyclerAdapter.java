@@ -2,6 +2,7 @@ package com.rahuljanagouda.popularmoviestwo.adapters;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,22 +21,23 @@ import java.util.List;
  */
 public class ReviewsListRecyclerAdapter extends RecyclerView.Adapter<ReviewsListRecyclerAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<Result> reviews;
+    private final Context mContext;
+    private final List<Result> reviews;
 
     public ReviewsListRecyclerAdapter(Context mContext, List<Result> reviews) {
         this.mContext = mContext;
         this.reviews = reviews;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = View.inflate(parent.getContext(), R.layout.item_review, null);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Result review = reviews.get(position);
 
         holder.mReviewUser.setText(review.getAuthor());
@@ -50,11 +52,12 @@ public class ReviewsListRecyclerAdapter extends RecyclerView.Adapter<ReviewsList
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mReviewUser, mReviewContent;
-        private ImageView mAvatar;
+        private final TextView mReviewUser;
+        private final TextView mReviewContent;
+        private final ImageView mAvatar;
 
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mReviewUser = (TextView) itemView.findViewById(R.id.reviewUser);

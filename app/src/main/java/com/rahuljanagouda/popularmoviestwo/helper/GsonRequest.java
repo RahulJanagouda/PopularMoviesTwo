@@ -4,6 +4,9 @@ package com.rahuljanagouda.popularmoviestwo.helper;
  * Created by rahuljanagouda on 20/02/16.
  */
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -24,6 +27,7 @@ import java.util.Map;
 public class GsonRequest<T> extends Request<T> {
     private final Gson gson = new Gson();
     private final Class<T> clazz;
+    @Nullable
     private final Map<String, String> headers;
     private final Listener<T> listener;
 
@@ -41,6 +45,7 @@ public class GsonRequest<T> extends Request<T> {
         this.listener = listener;
     }
 
+    @Nullable
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         return headers != null ? headers : super.getHeaders();
@@ -51,8 +56,9 @@ public class GsonRequest<T> extends Request<T> {
         listener.onResponse(response);
     }
 
+    @NonNull
     @Override
-    protected Response<T> parseNetworkResponse(NetworkResponse response) {
+    protected Response<T> parseNetworkResponse(@NonNull NetworkResponse response) {
         try {
             String json = new String(
                     response.data, HttpHeaderParser.parseCharset(response.headers));

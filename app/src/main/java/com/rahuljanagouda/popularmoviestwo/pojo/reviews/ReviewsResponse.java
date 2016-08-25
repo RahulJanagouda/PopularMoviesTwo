@@ -2,6 +2,7 @@ package com.rahuljanagouda.popularmoviestwo.pojo.reviews;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -14,6 +15,19 @@ import java.util.List;
  */
 public class ReviewsResponse implements Parcelable {
 
+    public static final Parcelable.Creator<ReviewsResponse> CREATOR = new Parcelable.Creator<ReviewsResponse>() {
+        @NonNull
+        @Override
+        public ReviewsResponse createFromParcel(@NonNull Parcel source) {
+            return new ReviewsResponse(source);
+        }
+
+        @NonNull
+        @Override
+        public ReviewsResponse[] newArray(int size) {
+            return new ReviewsResponse[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -29,6 +43,17 @@ public class ReviewsResponse implements Parcelable {
     @SerializedName("total_results")
     @Expose
     private Integer totalResults;
+
+    public ReviewsResponse() {
+    }
+
+    protected ReviewsResponse(@NonNull Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.page = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.results = in.createTypedArrayList(Result.CREATOR);
+        this.totalPages = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.totalResults = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
 
     /**
      * @return The id
@@ -106,34 +131,11 @@ public class ReviewsResponse implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeValue(this.id);
         dest.writeValue(this.page);
         dest.writeTypedList(this.results);
         dest.writeValue(this.totalPages);
         dest.writeValue(this.totalResults);
     }
-
-    public ReviewsResponse() {
-    }
-
-    protected ReviewsResponse(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.page = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.results = in.createTypedArrayList(Result.CREATOR);
-        this.totalPages = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.totalResults = (Integer) in.readValue(Integer.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<ReviewsResponse> CREATOR = new Parcelable.Creator<ReviewsResponse>() {
-        @Override
-        public ReviewsResponse createFromParcel(Parcel source) {
-            return new ReviewsResponse(source);
-        }
-
-        @Override
-        public ReviewsResponse[] newArray(int size) {
-            return new ReviewsResponse[size];
-        }
-    };
 }

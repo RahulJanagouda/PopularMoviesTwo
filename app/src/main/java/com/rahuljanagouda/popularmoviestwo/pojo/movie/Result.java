@@ -3,6 +3,7 @@ package com.rahuljanagouda.popularmoviestwo.pojo.movie;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,10 +19,12 @@ import java.util.List;
 public class Result implements Parcelable {
 
     public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
-        public Result createFromParcel(Parcel source) {
+        @NonNull
+        public Result createFromParcel(@NonNull Parcel source) {
             return new Result(source);
         }
 
+        @NonNull
         public Result[] newArray(int size) {
             return new Result[size];
         }
@@ -73,8 +76,7 @@ public class Result implements Parcelable {
     }
 
 
-
-    private Result(Parcel in) {
+    private Result(@NonNull Parcel in) {
         this.posterPath = in.readString();
         this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.overview = in.readString();
@@ -106,8 +108,8 @@ public class Result implements Parcelable {
                   boolean movieVideo,
                   double movieVoteAverage,
                   int movieVoteCount) {
-        this.posterPath =moviePosterPath;
-        this.adult =movieAdult;
+        this.posterPath = moviePosterPath;
+        this.adult = movieAdult;
         this.overview = movieOverview;
         this.releaseDate = movieReleaseDate;
         this.genreIds = movieGenre;
@@ -117,7 +119,7 @@ public class Result implements Parcelable {
         this.title = movieTitle;
         this.backdropPath = movieBackdropPath;
         this.popularity = moviePopularity;
-        this.voteCount =movieVoteCount;
+        this.voteCount = movieVoteCount;
         this.video = movieVideo;
         this.voteAverage = movieVoteAverage;
     }
@@ -324,7 +326,7 @@ public class Result implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(this.posterPath);
         dest.writeValue(this.adult);
         dest.writeString(this.overview);

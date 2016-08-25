@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -39,19 +40,20 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
 
     private static final int REQ_START_STANDALONE_PLAYER = 1;
     private static final int REQ_RESOLVE_SERVICE_MISSING = 2;
-
+    @Nullable
+    private
+    List<Result> videos;
+    @Nullable
+    private
+    com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie;
+    private Context mContext;
     private RecyclerView videosRecycler;
     private LinearLayoutManager linearLayoutManager;
-    private VideoListRecyclerAdapter mVideoListRecyclerAdapter;
-
-    List<Result> videos;
-    com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie;
-    Context mContext;
     private View noVideosView;
 
 
-
-    public static VideosFragment newInstance(com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie){
+    @NonNull
+    public static VideosFragment newInstance(@Nullable com.rahuljanagouda.popularmoviestwo.pojo.movie.Result movie) {
         if (movie == null) {
             throw new IllegalArgumentException("Movies cant be null");
         }
@@ -73,17 +75,17 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
     }
 
 
-    private void checkInternetAndRequestData(){
-        if (Network.isOnline(mContext)){
+    private void checkInternetAndRequestData() {
+        if (Network.isOnline(mContext)) {
             getVideosData();
-        }else {
+        } else {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(mContext);
             builder.setTitle("No Internet Connection");
             builder.setMessage("Oops, No internet connection found. Please connect and retry again.");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(@NonNull DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
@@ -98,16 +100,16 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
         }
     }
 
-    public void getVideosData() {
+    private void getVideosData() {
 
-        String URL = Network.TMDB_VIDEO_URL.replace("{id}",String.valueOf(movie.getId()));
+        String URL = Network.TMDB_VIDEO_URL.replace("{id}", String.valueOf(movie.getId()));
 
         GsonRequest<VideoResponse> gsonRequest = new GsonRequest<>(URL, VideoResponse.class, new Response.Listener<VideoResponse>() {
             @Override
-            public void onResponse(VideoResponse response) {
+            public void onResponse(@NonNull VideoResponse response) {
 
 
-                if(response.getResults().size()>0) {
+                if (response.getResults().size() > 0) {
                     initAdapter(response.getResults());
                 } else {
                     showNoReviews(true);
@@ -125,19 +127,20 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
 
     private void initAdapter(List<Result> videos) {
         showNoReviews(false);
-        mVideoListRecyclerAdapter = new VideoListRecyclerAdapter(mContext,videos);
+        VideoListRecyclerAdapter mVideoListRecyclerAdapter = new VideoListRecyclerAdapter(mContext, videos);
         mVideoListRecyclerAdapter.setCallback(this);
         videosRecycler.setAdapter(mVideoListRecyclerAdapter);
     }
 
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_videos, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         videosRecycler = (RecyclerView) view.findViewById(R.id.videosRecycler);
@@ -148,9 +151,8 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
 //        videosRecycler.setLayoutManager(linearLayoutManager);
 
         videosRecycler.setHasFixedSize(true);
-        videosRecycler.addItemDecoration(new GridSpacingItemDecoration(2,3,true));
-        videosRecycler.setLayoutManager(new GridLayoutManager(mContext,2));
-
+        videosRecycler.addItemDecoration(new GridSpacingItemDecoration(2, 3, true));
+        videosRecycler.setLayoutManager(new GridLayoutManager(mContext, 2));
 
 
 //        int spacing = General.dpToPx(5, getActivity());
@@ -160,12 +162,12 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
     }
 
     @Override
-    public void onVideoClick(Result video) {
+    public void onVideoClick(@NonNull Result video) {
         inflateVideoPlayer(video.getKey());
 
     }
 
-    private void inflateVideoPlayer(String videoKey) {
+    private void inflateVideoPlayer(@NonNull String videoKey) {
 
         int startTimeMillis = 0;
         boolean autoplay = true;
@@ -190,7 +192,7 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
         return resolveInfo != null && !resolveInfo.isEmpty();
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_START_STANDALONE_PLAYER && resultCode != getActivity().RESULT_OK) {
             YouTubeInitializationResult errorReason =
@@ -204,12 +206,12 @@ public class VideosFragment extends Fragment implements VideoListRecyclerAdapter
         }
     }
 
-    private void showNoReviews(boolean value){
+    private void showNoReviews(boolean value) {
 
-        int noReviewsVisibility = value? View.VISIBLE : View.GONE;
+        int noReviewsVisibility = value ? View.VISIBLE : View.GONE;
         noVideosView.setVisibility(noReviewsVisibility);
 
-        int recyclerViewVisibility = value? View.GONE : View.VISIBLE;
+        int recyclerViewVisibility = value ? View.GONE : View.VISIBLE;
         videosRecycler.setVisibility(recyclerViewVisibility);
     }
 

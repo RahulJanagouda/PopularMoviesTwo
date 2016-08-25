@@ -31,16 +31,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MovieListActivity" />
         </activity>
+
         <provider
-            android:authorities="@string/content_authority"
             android:name=".database.MoviesProvider"
+            android:authorities="@string/content_authority"
             android:exported="false"
-            android:syncable="true"/>
+            android:syncable="true" />
         <receiver
             android:name=".database.DatabaseChangedReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
-                <action android:name="com.rahuljanagouda.popularmoviestwo"/>
+                <action android:name="com.rahuljanagouda.popularmoviestwo" />
             </intent-filter>
         </receiver>
     </application>

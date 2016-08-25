@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -19,11 +20,15 @@ import com.rahuljanagouda.popularmoviestwo.R;
 /**
  * Created by rahul on 19/1/15.
  */
+@SuppressWarnings("ALL")
 public class ProgressWheel extends View {
     private static final String TAG = ProgressWheel.class.getSimpleName();
     private final int barLength = 16;
-    private final int barMaxLength = 270;
-    private final long pauseGrowingTime = 200;
+    //Paints
+    @NonNull
+    private final Paint barPaint = new Paint();
+    @NonNull
+    private final Paint rimPaint = new Paint();
     //Sizes (with defaults in DP)
     private int circleRadius = 30;
     private int barWidth = 3;
@@ -37,12 +42,8 @@ public class ProgressWheel extends View {
     //Colors (with defaults)
     private int barColor = 0xAA000000;
     private int rimColor = 0x00FFFFFF;
-
-    //Paints
-    private Paint barPaint = new Paint();
-    private Paint rimPaint = new Paint();
-
     //Rectangles
+    @NonNull
     private RectF circleBounds = new RectF();
 
     //Animation
@@ -66,7 +67,7 @@ public class ProgressWheel extends View {
      * @param context
      * @param attrs
      */
-    public ProgressWheel(Context context, AttributeSet attrs) {
+    public ProgressWheel(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
 
         parseAttributes(context.obtainStyledAttributes(attrs,
@@ -195,7 +196,7 @@ public class ProgressWheel extends View {
      *
      * @param a the attributes to parse
      */
-    private void parseAttributes(TypedArray a) {
+    private void parseAttributes(@NonNull TypedArray a) {
         // We transform the default values from DIP to pixels
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         barWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, barWidth, metrics);
@@ -237,7 +238,7 @@ public class ProgressWheel extends View {
     //Animation stuff
     //----------------------------------
 
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         canvas.drawArc(circleBounds, 360, 360, false, rimPaint);
@@ -299,7 +300,7 @@ public class ProgressWheel extends View {
     }
 
     @Override
-    protected void onVisibilityChanged(View changedView, int visibility) {
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
 
         if (visibility == VISIBLE) {
@@ -308,6 +309,7 @@ public class ProgressWheel extends View {
     }
 
     private void updateBarLength(long deltaTimeInMilliSeconds) {
+        long pauseGrowingTime = 200;
         if (pausedTimeWithoutGrowing >= pauseGrowingTime) {
             timeStartGrowing += deltaTimeInMilliSeconds;
 
@@ -322,6 +324,7 @@ public class ProgressWheel extends View {
             }
 
             float distance = (float) Math.cos((timeStartGrowing / barSpinCycleTime + 1) * Math.PI) / 2 + 0.5f;
+            int barMaxLength = 270;
             float destLength = (barMaxLength - barLength);
 
             if (barGrowingFromFront) {
@@ -366,7 +369,7 @@ public class ProgressWheel extends View {
     /**
      * Puts the view on spin mode
      */
-    public void spin() {
+    private void spin() {
         lastTimeAnimated = SystemClock.uptimeMillis();
         isSpinning = true;
         invalidate();
@@ -407,6 +410,7 @@ public class ProgressWheel extends View {
     }
 
     // Great way to save a view's state http://stackoverflow.com/a/7089687/1991053
+    @NonNull
     @Override
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
@@ -641,10 +645,12 @@ public class ProgressWheel extends View {
         //required field that makes Parcelables from a Parcel
         public static final Creator<WheelSavedState> CREATOR =
                 new Creator<WheelSavedState>() {
-                    public WheelSavedState createFromParcel(Parcel in) {
+                    @NonNull
+                    public WheelSavedState createFromParcel(@NonNull Parcel in) {
                         return new WheelSavedState(in);
                     }
 
+                    @NonNull
                     public WheelSavedState[] newArray(int size) {
                         return new WheelSavedState[size];
                     }
@@ -665,7 +671,7 @@ public class ProgressWheel extends View {
             super(superState);
         }
 
-        private WheelSavedState(Parcel in) {
+        private WheelSavedState(@NonNull Parcel in) {
             super(in);
             this.mProgress = in.readFloat();
             this.mTargetProgress = in.readFloat();
@@ -681,7 +687,7 @@ public class ProgressWheel extends View {
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
+        public void writeToParcel(@NonNull Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeFloat(this.mProgress);
             out.writeFloat(this.mTargetProgress);

@@ -6,6 +6,7 @@ package com.rahuljanagouda.popularmoviestwo.pojo.movie;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -16,10 +17,12 @@ import java.util.List;
 public class MovieApiResponse implements Parcelable {
 
     public static final Parcelable.Creator<MovieApiResponse> CREATOR = new Parcelable.Creator<MovieApiResponse>() {
-        public MovieApiResponse createFromParcel(Parcel source) {
+        @NonNull
+        public MovieApiResponse createFromParcel(@NonNull Parcel source) {
             return new MovieApiResponse(source);
         }
 
+        @NonNull
         public MovieApiResponse[] newArray(int size) {
             return new MovieApiResponse[size];
         }
@@ -40,7 +43,7 @@ public class MovieApiResponse implements Parcelable {
     public MovieApiResponse() {
     }
 
-    protected MovieApiResponse(Parcel in) {
+    protected MovieApiResponse(@NonNull Parcel in) {
         this.page = (Integer) in.readValue(Integer.class.getClassLoader());
         this.results = in.createTypedArrayList(Result.CREATOR);
         this.totalResults = (Integer) in.readValue(Integer.class.getClassLoader());
@@ -109,7 +112,7 @@ public class MovieApiResponse implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeValue(this.page);
         dest.writeTypedList(results);
         dest.writeValue(this.totalResults);

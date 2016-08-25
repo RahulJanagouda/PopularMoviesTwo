@@ -2,6 +2,7 @@ package com.rahuljanagouda.popularmoviestwo.pojo.videos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -14,6 +15,19 @@ import java.util.List;
  */
 public class VideoResponse implements Parcelable {
 
+    public static final Parcelable.Creator<VideoResponse> CREATOR = new Parcelable.Creator<VideoResponse>() {
+        @NonNull
+        @Override
+        public VideoResponse createFromParcel(@NonNull Parcel source) {
+            return new VideoResponse(source);
+        }
+
+        @NonNull
+        @Override
+        public VideoResponse[] newArray(int size) {
+            return new VideoResponse[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -21,37 +35,37 @@ public class VideoResponse implements Parcelable {
     @Expose
     private List<Result> results = new ArrayList<Result>();
 
+    public VideoResponse() {
+    }
+
+    protected VideoResponse(@NonNull Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.results = in.createTypedArrayList(Result.CREATOR);
+    }
+
     /**
-     *
-     * @return
-     * The id
+     * @return The id
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     *
-     * @param id
-     * The id
+     * @param id The id
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     *
-     * @return
-     * The results
+     * @return The results
      */
     public List<Result> getResults() {
         return results;
     }
 
     /**
-     *
-     * @param results
-     * The results
+     * @param results The results
      */
     public void setResults(List<Result> results) {
         this.results = results;
@@ -63,28 +77,8 @@ public class VideoResponse implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeValue(this.id);
         dest.writeTypedList(this.results);
     }
-
-    public VideoResponse() {
-    }
-
-    protected VideoResponse(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.results = in.createTypedArrayList(Result.CREATOR);
-    }
-
-    public static final Parcelable.Creator<VideoResponse> CREATOR = new Parcelable.Creator<VideoResponse>() {
-        @Override
-        public VideoResponse createFromParcel(Parcel source) {
-            return new VideoResponse(source);
-        }
-
-        @Override
-        public VideoResponse[] newArray(int size) {
-            return new VideoResponse[size];
-        }
-    };
 }

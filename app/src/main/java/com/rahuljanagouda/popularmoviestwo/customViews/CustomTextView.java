@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -36,17 +37,17 @@ public class CustomTextView extends TextView {
         setCustomFont(getContext(), attrs);
     }
 
-    private void setCustomFont(Context ctx, AttributeSet attrs) {
+    private void setCustomFont(@NonNull Context ctx, AttributeSet attrs) {
         TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.CustomTextView);
         String customFont = a.getString(R.styleable.CustomTextView_customFont);
         setCustomFont(ctx, customFont);
         a.recycle();
     }
 
-    public boolean setCustomFont(Context ctx, String assetPath) {
+    private boolean setCustomFont(@NonNull Context ctx, String assetPath) {
         Typeface tf = null;
         try {
-            tf = Typeface.createFromAsset(ctx.getAssets(), "fonts/"+assetPath+".ttf");
+            tf = Typeface.createFromAsset(ctx.getAssets(), "fonts/" + assetPath + ".ttf");
         } catch (Exception e) {
             throw new RuntimeException("Font asset not found " + assetPath);
 //            return false;

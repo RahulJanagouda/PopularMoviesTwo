@@ -3,6 +3,7 @@ package com.rahuljanagouda.popularmoviestwo.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
     private final Context mContext;
     private final MovieApiResponse pageResponse;
-    private boolean mTwoPane;
+    private final boolean mTwoPane;
 
     public MovieListRecyclerAdapter(Context mContext, MovieApiResponse response, boolean mTwoPane) {
         this.mContext = mContext;
@@ -35,14 +36,16 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
         this.mTwoPane = mTwoPane;
     }
 
+
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_movie,parent,false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_movie, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         final Result movie = pageResponse.getResults().get(position);
 
@@ -73,13 +76,13 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(@NonNull View v) {
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putParcelable(MovieDetailFragment.MOVIE_RESULT_KEY, movie);
                     MovieDetailFragment fragment = new MovieDetailFragment();
                     fragment.setArguments(arguments);
-                    ((AppCompatActivity)mContext).getSupportFragmentManager().beginTransaction()
+                    ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.movie_detail_container, fragment)
                             .commit();
                 } else {
@@ -104,10 +107,10 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView card_image;
-        TextView movieName;
+        final ImageView card_image;
+        final TextView movieName;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             card_image = (ImageView) itemView.findViewById(R.id.card_image);
             movieName = (TextView) itemView.findViewById(R.id.movieName);

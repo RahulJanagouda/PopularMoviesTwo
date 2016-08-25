@@ -1,8 +1,8 @@
 package com.rahuljanagouda.popularmoviestwo.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,10 +20,8 @@ import com.rahuljanagouda.popularmoviestwo.pojo.movie.Result;
 public class MovieDetailActivity extends AppCompatActivity {
 
 
-    private Result movieResult;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -32,9 +30,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
-        movieResult = getIntent().getParcelableExtra(MovieDetailFragment.MOVIE_RESULT_KEY);
-
-
+        Result movieResult = getIntent().getParcelableExtra(MovieDetailFragment.MOVIE_RESULT_KEY);
 
 
         // Show the Up button in the action bar.
@@ -91,7 +87,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
@@ -101,7 +97,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, MovieListActivity.class));
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
