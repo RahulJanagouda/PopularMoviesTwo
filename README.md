@@ -1,12 +1,16 @@
-# PopularMoviesTwo
-Udacity Popular Movies Two
+# Flicks
+<img src="PlaystoreImages/flicks_demo.gif" width="300" align="right" hspace="20">
+
+
+Udacity Popular Movies Two Project
 
 This project is the upgradation to the first Popular movies app.
 This includes following changes
 
+## [Playstore Link](https://play.google.com/store/apps/details?id=com.rahuljanagouda.popularmoviestwo)
+
 
 ##Screenshots
-
 
 <img src="PlaystoreImages/device-2016-11-04-161418.png" width="25%" />
 <img src="PlaystoreImages/device-2016-11-04-161658.png" width="25%" />
