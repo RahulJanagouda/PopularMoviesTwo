@@ -5,7 +5,7 @@ This project is the upgradation to the first Popular movies app.
 This includes following changes
 
 
-#User Interface - Layout
+##User Interface - Layout
 
 1. UI contains an element (e.g., a spinner or settings menu) to toggle the sort order of the movies by: most popular, highest rated.
 2. Movies are displayed in the main layout via a grid of their corresponding movie poster thumbnails.
@@ -16,7 +16,7 @@ This includes following changes
 
 
 
-#User Interface - Function
+##User Interface - Function
 
 1. When a user changes the sort criteria (most popular, highest rated, and favorites) the main view gets updated correctly.
 2. When a movie poster thumbnail is selected, the movie details screen is launched [Phone] or displayed in a fragment [Tablet].
@@ -25,7 +25,7 @@ This includes following changes
 
 
 
-#Network API Implementation
+##Network API Implementation
 
 1. In a background thread, app queries the /movie/popular or /movie/top_rated API for the sort criteria specified in the settings menu.
 2. App requests for related videos for a selected movie via the /movie/{id}/videos endpoint in a background thread and displays those details when the user selects a movie.
@@ -33,20 +33,20 @@ This includes following changes
 
 
 
-#Data Persistence
+##Data Persistence
 
 1. App saves a "Favorited" movie to SharedPreferences or a database using the movie’s id.
 2. When the "favorites" setting option is selected, the main view displays the entire favorites collection based on movie IDs stored in SharedPreferences or a database.
 
 
 
-General Project Guidelines
+###General Project Guidelines
 
 1. App conforms to common standards found in the Android Nanodegree General Project Guidelines.
 
 
 
-# Suggestions to Make Your Project Stand Out!
+### Suggestions to Make Your Project Stand Out!
 1. Implement a content provider to store favorite movie details with a database such as SQLite. Store the title, poster, synopsis, user rating, and release date and display them even when offline.
 2. Implement sharing functionality to allow the user to share the first trailer’s YouTube URL from the movie details screen.
 
