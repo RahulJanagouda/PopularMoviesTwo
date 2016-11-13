@@ -5,6 +5,18 @@ This project is the upgradation to the first Popular movies app.
 This includes following changes
 
 
+##Screenshots
+
+
+<img src="PlaystoreImages/device-2016-11-04-161418.png" width="25%" />
+<img src="PlaystoreImages/device-2016-11-04-161658.png" width="25%" />
+<img src="PlaystoreImages/device-2016-11-04-161828.png" width="25%" />
+<img src="PlaystoreImages/device-2016-11-04-162145.png" width="25%" />
+<img src="PlaystoreImages/device-2016-11-04-162248.png" width="25%" />
+<img src="PlaystoreImages/device-2016-11-04-162334.png" width="25%" />
+
+
+
 ##User Interface - Layout
 
 1. UI contains an element (e.g., a spinner or settings menu) to toggle the sort order of the movies by: most popular, highest rated.
@@ -56,21 +68,24 @@ This includes following changes
 
 
 
-License
--------
-Copyright 2015 The Android Open Source Project, Inc.
+### License
+
+
+```
+Copyright 2016 Rahul Janagouda.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor
-license agreements.  See the NOTICE file distributed with this work for
-additional information regarding copyright ownership.  The ASF licenses this
+license agreements. See the NOTICE file distributed with this work for
+additional information regarding copyright ownership. The ASF licenses this
 file to you under the Apache License, Version 2.0 (the "License"); you may not
-use this file except in compliance with the License.  You may obtain a copy of
+use this file except in compliance with the License. You may obtain a copy of
 the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
+```
